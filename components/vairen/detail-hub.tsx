@@ -1,47 +1,149 @@
 'use client'
 
-import { ArrowLeft, CheckCircle2, Clock3, ExternalLink, Play, Sparkles } from 'lucide-react'
-import { professions, courses, type Course, type Profession } from '@/lib/data'
+import { useState } from 'react'
+import { ArrowLeft, Check, Copy, Sparkles } from 'lucide-react'
+import { professions, professionImage, professionPrompt } from '@/lib/data'
 import type { Dictionary, Locale } from '@/lib/i18n'
+import { CareerImage } from './career-image'
+import { RelatedCourses } from './courses-view'
 
-type Props = { kind: 'profession' | 'course'; id: string; locale: Locale; t: Dictionary; onBack: () => void; onConsult: (prompt: string) => void }
-
-const images: Record<string, string> = {
-  'ml-engineer': 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=1400&q=85',
-  'backend-engineer': 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1400&q=85',
-  'cloud-architect': 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=85',
-  'security-analyst': 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1400&q=85',
-  'devops-engineer': 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&w=1400&q=85',
-  'data-engineer': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=85',
-  'product-designer': 'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=1400&q=85',
+type Props = {
+  id: string
+  locale: Locale
+  t: Dictionary
+  onBack: () => void
+  onConsult: (prompt: string) => void
+  onOpenCourse: (id: string) => void
 }
-
-export function DetailHub({ kind, id, locale, t, onBack, onConsult }: Props) {
-  const item = kind === 'profession' ? professions.find((p) => p.id === id) : courses.find((c) => c.id === id)
-  if (!item) return null
-  const title = item.title[locale]
-  const image = images[id] ?? 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=85'
-  const isProfession = kind === 'profession'
-  const profession = item as Profession
-  const course = item as Course
-  const lessons = isProfession ? profession.skills.map((skill) => skill.name[locale]) : Array.from({ length: course.modules }, (_, i) => `${locale === 'ar' ? 'الوحدة' : 'Module'} ${String(i + 1).padStart(2, '0')} · ${course.title[locale]}`)
-
+export function DetailHub({ id, locale, t, onBack, onConsult, onOpenCourse }: Props) {
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle')
+  const p = professions.find((p) => p.id === id)
+  if (!p) return null
+  const prompt = professionPrompt(p, locale)
+  async function copyPrompt() {
+    try {
+      await navigator.clipboard.writeText(prompt)
+      setCopyState('copied')
+    } catch {
+      setCopyState('error')
+    }
+  }
   return (
-    <section className="animate-view-in flex flex-col gap-6" aria-labelledby="hub-title">
-      <button type="button" onClick={onBack} className="flex w-fit items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"><ArrowLeft className="size-4 rtl:rotate-180" />{locale === 'ar' ? 'عودة' : 'Back to library'}</button>
-      <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-card">
-        <img src={image} alt="" className="h-48 w-full object-cover opacity-70 sm:h-64" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent" />
-        <div className="absolute inset-x-5 bottom-5"><span className="font-mono text-[10px] uppercase tracking-[0.24em] text-signal">{isProfession ? profession.field[locale] : course.code}</span><h1 id="hub-title" className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h1></div>
+    <section className="animate-view-in flex flex-col gap-7" aria-labelledby="hub-title">
+      <button
+        type="button"
+        onClick={onBack}
+        className="flex w-fit items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeft className="size-4 rtl:rotate-180" />
+        {t.common.back}
+      </button>
+      <div className="relative overflow-hidden rounded-3xl border border-border bg-card">
+        <CareerImage
+          src={professionImage(id)}
+          alt={p.title[locale]}
+          eager
+          className="h-64 w-full object-cover sm:h-96"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#101d1b] via-[#101d1b]/30 to-transparent" />
+        <div className="absolute inset-x-6 bottom-6 text-white">
+          <p className="mb-3 text-xs tracking-widest text-[#a8e0c8]">{p.field[locale]}</p>
+          <h1 id="hub-title" className="text-3xl font-semibold sm:text-5xl">
+            {p.title[locale]}
+          </h1>
+        </div>
       </div>
-      <div className="grid grid-cols-3 gap-2">
-        {isProfession ? <><Metric label={t.professions.salary} value={profession.salary} /><Metric label={t.professions.growth} value={profession.growth} /><Metric label={t.professions.demand} value={t.professions.levels[profession.demand]} /></> : <><Metric label={t.courses.modules} value={String(course.modules)} /><Metric label={t.courses.hours} value={String(course.hours)} /><Metric label={locale === 'ar' ? 'المستوى' : 'Level'} value={t.courses.level[course.level]} /></>}
+      <a
+        href={`https://images.unsplash.com/photo-${photoIds[id]}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="-mt-4 w-fit text-[10px] text-muted-foreground underline underline-offset-4"
+      >
+        {t.career.photo}
+      </a>
+      <div className="grid gap-6 sm:grid-cols-[1fr_1.4fr]">
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-widest text-signal">
+            {t.professions.analyze}
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold">{t.professions.skills}</h2>
+          <p className="mt-3 text-xs leading-6 text-muted-foreground">{t.career.skillsHint}</p>
+        </div>
+        <ul className="grid gap-3">
+          {p.skills.map((s, i) => (
+            <li
+              key={s.name.en}
+              className="flex items-center gap-4 rounded-xl border border-border bg-card p-4"
+            >
+              <span className="font-mono text-xs text-signal">0{i + 1}</span>
+              <h3 className="text-sm font-medium">{s.name[locale]}</h3>
+            </li>
+          ))}
+        </ul>
       </div>
-      <div className="rounded-2xl border border-border bg-card p-5"><div className="flex items-center gap-2 text-signal"><Sparkles className="size-4" /><span className="font-mono text-[10px] uppercase tracking-[0.2em]">{locale === 'ar' ? 'مسار مصمم بعناية' : 'Curated path'}</span></div><p className="mt-3 text-sm leading-7 text-muted-foreground">{isProfession ? (locale === 'ar' ? 'مسار عملي من المهارات الأساسية إلى إثبات الخبرة وبناء ملف مهني قادر على المنافسة عالميًا.' : 'A practical path from foundational skills to proof of work, portfolio signal, and globally competitive roles.') : course.summary[locale]}</p></div>
-      <div className="flex flex-col gap-3"><h2 className="text-lg font-semibold">{locale === 'ar' ? 'المنهج الكامل' : 'Complete curriculum'}</h2>{lessons.map((lesson, index) => <button key={lesson} type="button" className="group flex items-center gap-3 rounded-2xl border border-border bg-card p-4 text-start transition-all hover:-translate-y-0.5 hover:border-ring"><span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary font-mono text-xs text-muted-foreground">{String(index + 1).padStart(2, '0')}</span><span className="flex-1 text-sm font-medium">{lesson}</span><Play className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5" /></button>)}</div>
-      <button type="button" onClick={() => onConsult(`Create a detailed learning and career plan for ${item.title.en}. Include prerequisites, projects, milestones and interview preparation.`)} className="flex h-12 items-center justify-center gap-2 rounded-xl bg-foreground text-sm font-medium text-primary-foreground transition-transform hover:scale-[1.01] active:scale-[0.98]"><ExternalLink className="size-4" />{locale === 'ar' ? 'اسأل فيرين عن هذا المسار' : 'Ask Vairen about this path'}</button>
+      <div className="overflow-hidden rounded-2xl border border-border bg-card">
+        <div className="p-5">
+          <h2 className="text-xl font-semibold">{t.career.visual}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{t.career.visualHint}</p>
+        </div>
+        <img
+          src={`/images/learning/${id}-${locale}.svg`}
+          alt={`${t.career.visual}: ${p.title[locale]}`}
+          width={1200}
+          height={720}
+          loading="lazy"
+          className="w-full"
+        />
+      </div>
+      <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h2 className="text-lg font-semibold">{t.career.prompt}</h2>
+          <button
+            type="button"
+            onClick={copyPrompt}
+            className="flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs hover:bg-secondary"
+          >
+            {copyState === 'copied' ? <Check className="size-4" /> : <Copy className="size-4" />}
+            {copyState === 'copied' ? t.career.copied : t.career.copy}
+          </button>
+        </div>
+        <p className="mt-3 text-xs leading-6 text-muted-foreground">{t.career.promptHint}</p>
+        <p className="mt-4 select-text rounded-xl bg-secondary p-4 text-sm leading-7">{prompt}</p>
+        <span role="status" className="mt-2 block text-xs text-muted-foreground">
+          {copyState === 'error' ? t.career.copyError : copyState === 'copied' ? t.career.copied : ''}
+        </span>
+      </div>
+      <button
+        type="button"
+        onClick={() =>
+          onConsult(
+            locale === 'ar'
+              ? `أريد خطة عملية لمهنة ${p.title.ar}. اذكر المتطلبات ومشروعاً تطبيقياً وخطوات الاستعداد للمقابلات، واسألني عن خبرتي الحالية.`
+              : `Help me plan a career as a ${p.title.en}. Include prerequisites, a practical project and interview preparation. Ask about my current experience.`,
+          )
+        }
+        className="flex min-h-13 items-center justify-center gap-2 rounded-xl bg-foreground px-4 py-3 text-sm font-medium text-primary-foreground hover:opacity-90"
+      >
+        <Sparkles className="size-4" />
+        {t.career.consult}
+      </button>
+      <div className="border-t border-border pt-7">
+        <h2 className="mb-5 text-2xl font-semibold">{t.career.learning}</h2>
+        <p className="mb-5 text-xs leading-6 text-muted-foreground">{t.learning.note}</p>
+        <RelatedCourses professionId={id} t={t} locale={locale} onOpen={onOpenCourse} />
+      </div>
     </section>
   )
 }
-
-function Metric({ label, value }: { label: string; value: string }) { return <div className="rounded-xl border border-border bg-card p-3"><p className="text-[10px] text-muted-foreground">{label}</p><p className="mt-1 truncate font-mono text-sm">{value}</p></div> }
+const photoIds: Record<string, string> = {
+  'ml-engineer': '1555949963-ff9fe0c870eb',
+  'backend-engineer': '1555066931-4365d14bab8c',
+  'cloud-architect': '1451187580459-43490279c0fa',
+  'security-analyst': '1563013544-824ae1b704d3',
+  'devops-engineer': '1667372393119-3d4c48d07fc9',
+  'data-engineer': '1551288049-bebda4e38f71',
+  'product-designer': '1558655146-d09347e92766',
+  'mobile-engineer': '1512941937669-90a1b58e7e9c',
+  'ai-researcher': '1677442136019-21780ecad995',
+  'blockchain-engineer': '1639762681485-074b7f938ba0',
+}

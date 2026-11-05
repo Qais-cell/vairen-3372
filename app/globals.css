@@ -35,26 +35,6 @@
 }
 
 :root {
-  color-scheme: dark;
-  --background: #000000;
-  --foreground: #f5f5f5;
-  --card: #0a0a0a;
-  --card-foreground: #f5f5f5;
-  --popover: #0a0a0a;
-  --popover-foreground: #f5f5f5;
-  --primary: #f5f5f5;
-  --primary-foreground: #000000;
-  --secondary: #141414;
-  --secondary-foreground: #f5f5f5;
-  --muted: #141414;
-  --muted-foreground: #8a8a8a;
-  --accent: #e30909;
-  --accent-foreground: #f5f5f5;
-  --destructive: #f87171;
-  --border: #1f1f1f;
-  --input: #1f1f1f;
-  --ring: #3a3a3a;
-  --signal: #22c55e;
   --radius: 0.75rem;
   --dir: 1;
 }
@@ -93,8 +73,13 @@
 }
 
 @keyframes intro-float {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-8px) scale(1.02); }
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
 }
 
 @keyframes signal-pulse {
@@ -113,16 +98,185 @@
   animation: signal-pulse 2.4s ease-out infinite;
 }
 
-@keyframes cinematic-glow {
-  0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,.08), 0 0 36px rgba(34,197,94,.08); }
-  50% { box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 0 90px rgba(34,197,94,.18); }
+.intro-orb {
+  animation: intro-float 2.4s ease-in-out infinite;
 }
-
-.intro-orb { animation: cinematic-glow 2.4s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
   .animate-view-in,
   .animate-signal {
     animation: none;
   }
+}
+
+/* Forest ink and warm paper: one palette across both appearances. */
+:root {
+  color-scheme: dark;
+  --background: #101b18;
+  --foreground: #f0f3ec;
+  --card: #17241f;
+  --card-foreground: #f0f3ec;
+  --popover: #17241f;
+  --popover-foreground: #f0f3ec;
+  --primary: #f0f3ec;
+  --primary-foreground: #101b18;
+  --secondary: #20332b;
+  --secondary-foreground: #f0f3ec;
+  --muted: #20332b;
+  --muted-foreground: #acbbb1;
+  --accent: #b5d4bd;
+  --accent-foreground: #101b18;
+  --destructive: #ffaaa1;
+  --border: #314339;
+  --input: #314339;
+  --ring: #87b49b;
+  --signal: #a4d2af;
+}
+:root[data-theme='light'] {
+  color-scheme: light;
+  --background: #fafbf8;
+  --foreground: #182b22;
+  --card: #ffffff;
+  --card-foreground: #182b22;
+  --popover: #ffffff;
+  --popover-foreground: #182b22;
+  --primary: #182b22;
+  --primary-foreground: #ffffff;
+  --secondary: #edf2eb;
+  --secondary-foreground: #182b22;
+  --muted: #edf2eb;
+  --muted-foreground: #5a6b5e;
+  --accent: #dceadd;
+  --accent-foreground: #182b22;
+  --destructive: #ac3029;
+  --border: #dce4d9;
+  --input: #dce4d9;
+  --ring: #437c55;
+  --signal: #376a46;
+}
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
+body {
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
+}
+[dir='rtl'] {
+  font-family: var(--font-arabic), sans-serif;
+}
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+button:not(:disabled),
+select {
+  cursor: pointer;
+}
+button,
+a {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 220ms ease,
+    opacity 180ms ease;
+}
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 4px;
+}
+::selection {
+  background: var(--signal);
+  color: var(--background);
+}
+.brand-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--foreground);
+  font-weight: 600;
+  font-size: 23px;
+  transform: rotate(-7deg);
+}
+.brand-mark span {
+  position: absolute;
+  bottom: 3px;
+  inset-inline-end: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--signal);
+}
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--foreground);
+}
+.icon-button:hover {
+  background: var(--secondary);
+  border-color: var(--ring);
+}
+.career-card,
+.course-card {
+  transition:
+    transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+.career-card:hover,
+.course-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--ring);
+  box-shadow: 0 12px 24px -20px var(--foreground);
+}
+.settings-dialog::backdrop {
+  background: rgb(10 23 17 / 0.55);
+  backdrop-filter: blur(7px);
+  animation: view-in 180ms ease backwards;
+}
+.settings-dialog[open] {
+  animation: view-in 250ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+.hero-note {
+  animation: view-in 700ms 100ms backwards;
+}
+@media (min-width: 640px) {
+  .career-grid > li:first-child .career-card {
+    border-color: var(--ring);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
 }
