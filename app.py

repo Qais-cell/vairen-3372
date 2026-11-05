@@ -1,0 +1,10 @@
+import streamlit as st
+
+st.set_page_config(page_title="Vairen", page_icon="⚡", layout="wide")
+
+st.markdown("<h1 style='text-align: center;'>V A I R E N</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #888;'>أهلاً بك في منصة فيرين الذكية</p>", unsafe_allow_html=True)
+
+user_name = st.text_input("أدخل اسمك الكريم للبدء:")
+if user_name:
+    st.success(f"أهلاً بك يا {user_name}! المنصة قيد التشغيل بنجاح.")
