@@ -1,0 +1,91 @@
+import streamlit as st
+import requests
+import json
+
+st.set_page_config(page_title="Vairen", page_icon="⚡", layout="wide", initial_sidebar_state="collapsed")
+
+API_KEY = "AQ.Ab8RN6Iq5EaT8cX5Sq5cxLfDHkKPcaTxITN0uJcsD_yZEleLAg"
+
+st.markdown("""
+<style>
+    .stApp { background-color: #000000; color: #ffffff; font-family: sans-serif; }
+    .oled-card { background: #0a0a0a; border: 1px solid #222; border-radius: 12px; padding: 16px; transition: 0.3s; }
+    .oled-card:hover { border-color: #fff; transform: translateY(-2px); }
+    #MainMenu, footer, header {visibility: hidden;}
+</style>
+""", unsafe_allow_html=True)
+
+if "logged_in" not in st.session_state: st.session_state.logged_in = False
+if "lang" not in st.session_state: st.session_state.lang = "العربية"
+if "chat_history" not in st.session_state: st.session_state.chat_history = []
+
+t = {
+    "العربية": {"welcome": "أهلاً، أنا فيرين", "start": "بدء الاستخدام", "p": "المهن", "c": "الكورسات", "ai": "الرفيق الذكي"},
+    "English": {"welcome": "Welcome, I am Vairen", "start": "Get Started", "p": "Professions", "c": "Courses", "ai": "AI Assistant"}
+}[st.session_state.lang]
+
+if not st.session_state.logged_in:
+    st.markdown(f"<h1 style='text-align:center; margin-top:15vh;'>V A I R E N</h1><p style='text-align:center; color:#888;'>{t['welcome']}</p>", unsafe_allow_html=True)
+    _, col2, _ = st.columns([1, 2, 1])
+    with col2:
+        with st.form("lf"):
+            uname = st.text_input("اسم المستخدم")
+            if st.form_submit_button(t['start'], use_container_width=True) and uname:
+                st.session_state.logged_in = True
+                st.session_state.uname = uname
+                st.rerun()
+    st.stop()
+
+c1, c3 = st.columns([8, 2])
+with c1: st.markdown(f"**⚡ Vairen** | أهلاً، {st.session_state.get('uname', 'قيس')}")
+with c3:
+    selected_l = st.selectbox("Lang", ["العربية", "English"], label_visibility="collapsed")
+    if selected_l != st.session_state.lang:
+        st.session_state.lang = selected_l
+        st.rerun()
+
+st.divider()
+t1, t2, t3 = st.tabs([t['p'], t['c'], t['ai']])
+
+with t1:
+    st.markdown(f"### {t['p']}")
+    profs = [
+        {"title": "هندسة الذكاء الاصطناعي", "img": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=60", "color": "#3b82f6"},
+        {"title": "التصميم الرقمي", "img": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&auto=format&fit=crop&q=60", "color": "#ec4899"},
+        {"title": "الأمن السيبراني", "img": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&auto=format&fit=crop&q=60", "color": "#10b981"}
+    ]
+    cols = st.columns(3)
+    for i, p in enumerate(profs):
+        with cols[i]:
+            st.markdown(f"""
+            <div class="oled-card" style="border-top: 3px solid {p['color']};">
+                <img src="{p['img']}" style="width:100%; height:120px; object-fit:cover; border-radius:8px;">
+                <h4 style="color:#fff; margin:10px 0 0 0;">{p['title']}</h4>
+            </div>
+            """, unsafe_allow_html=True)
+            if st.button("استشر الآن", key=f"p_{i}", use_container_width=True):
+                st.session_state.chat_history.append({"role": "user", "content": f"أريد خارطة طريق لمهنة: {p['title']}"})
+                st.rerun()
+
+with t2:
+    st.markdown(f"### {t['c']}")
+    st.markdown("- **كورس هندسة الأنظمة المتقدمة**: من الألف للياء مع أقسام وتطبيقات عملية.")
+    st.markdown("- **كورس تكامل الذكاء الاصطناعي وبناء الوكلاء الرقميين**.")
+
+with t3:
+    st.markdown(f"### {t['ai']}")
+    for m in st.session_state.chat_history:
+        with st.chat_message(m["role"]): st.markdown(m["content"])
+    if prompt := st.chat_input("اسأل فيرين..."):
+        st.session_state.chat_history.append({"role": "user", "content": prompt})
+        with st.chat_message("user"): st.markdown(prompt)
+        with st.chat_message("assistant"):
+            try:
+                res = requests.post(f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}", 
+                                    headers={"Content-Type": "application/json"}, 
+                                    data=json.dumps({"contents": [{"parts": [{"text": prompt}]}]}))
+                reply = res.json()['candidates'][0]['content']['parts'][0]['text']
+            except:
+                reply = "حدث خطأ في الاتصال، جرب مرة أخرى."
+            st.markdown(reply)
+            st.session_state.chat_history.append({"role": "assistant", "content": reply})
