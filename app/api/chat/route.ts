@@ -1,2 +1,4 @@
 import { careerChat } from '@/lib/career-chat'
-export const POST = careerChat
+export async function POST(request: Request): Promise<Response> {
+  return careerChat(request)
+}

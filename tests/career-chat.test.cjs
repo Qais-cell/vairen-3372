@@ -73,7 +73,7 @@ test('rejects unsupported methods, foreign origins, malformed JSON and oversized
   )
 })
 
-test('sends the selected language and bounded career instructions to the provider', async () => {
+test('sends the selected language and open conversation instructions to the provider', async () => {
   const { handler, payload } = setup()
   const response = await handler(request(validBody))
   assert.equal(response.status, 200)
@@ -95,3 +95,15 @@ for (const [upstream, expected] of [
     assert.doesNotMatch(await response.text(), /Private provider/)
   })
 }
+
+ test('supports roleplay and bounds trusted lesson context while rejecting unknown modes', async () => {
+  const { handler, payload } = setup()
+  const result = await handler(request({ ...validBody, mode: 'roleplay' }), 'Stage reference: Python functions')
+  assert.equal(result.status, 200)
+  assert.match(payload().messages[0].content, /Mode: roleplay/)
+  assert.match(payload().messages[0].content, /Stage reference: Python functions/)
+  assert.doesNotMatch(payload().messages[0].content, /Discuss only careers/)
+  assert.equal((await handler(request({ ...validBody, mode: 'invalid' }))).status, 400)
+  await handler(request(validBody), 'z'.repeat(20000))
+  assert.ok(payload().messages[0].content.length < 21000)
+})

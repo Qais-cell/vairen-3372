@@ -31,12 +31,17 @@ export function AssistantView({
   locale,
   initialPrompt,
   onPromptConsumed,
+  embedded = false,
+  lessonId,
 }: {
+  embedded?: boolean
+  lessonId?: string
   t: Dictionary
   locale: Locale
   initialPrompt?: string | null
   onPromptConsumed?: () => void
 }) {
+  const [mode, setMode] = useState('conversation')
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [pending, setPending] = useState(false)
@@ -93,6 +98,8 @@ export function AssistantView({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           locale,
+          mode: lessonId ? 'tutor' : mode,
+          lessonId,
           messages: history.slice(-16).map(({ role, text }) => ({ role, text })),
         }),
         signal: AbortSignal.timeout(55000),
@@ -177,17 +184,17 @@ export function AssistantView({
   }
 
   return (
-    <section className="animate-view-in flex flex-1 flex-col" aria-labelledby="assistant-title">
+    <section className="animate-view-in flex flex-1 flex-col" aria-label={t.assistant.title}>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <header className="flex flex-col gap-2">
           <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-signal">
             {t.chat.eyebrow}
           </span>
-          <h1 id="assistant-title" className="text-3xl font-semibold tracking-tight">
+          <h1  className="text-3xl font-semibold tracking-tight">
             {t.assistant.title}
           </h1>
           <p className="text-[15px] leading-relaxed text-muted-foreground text-pretty">
-            {t.assistant.subtitle}
+            {embedded ? (locale === 'ar' ? 'اسأل عن هذه المرحلة، بصوتك أو بالكتابة.' : 'Ask about this stage by voice or text.') : t.assistant.subtitle}
           </p>
         </header>
         <button
@@ -196,6 +203,7 @@ export function AssistantView({
           title={t.chat.voice}
           aria-pressed={readAloud}
           onClick={() => {
+            if (!('speechSynthesis' in window)) { setVoiceError(true); return }
             voiceRef.current = !readAloud
             setReadAloud(!readAloud)
             if (readAloud) window.speechSynthesis?.cancel()
@@ -217,8 +225,16 @@ export function AssistantView({
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-4 pb-32 pt-6" aria-live="polite">
-        {messages.length === 0 && (
+      {!embedded && <label className="mt-5 flex items-center gap-3 text-sm">
+        {locale === 'ar' ? 'أسلوب الحوار' : 'Conversation style'}
+        <select value={mode} onChange={(event) => setMode(event.target.value)} className="rounded-xl border border-border bg-card p-2">
+          <option value="conversation">{locale === 'ar' ? 'حوار مفتوح' : 'Open conversation'}</option>
+          <option value="roleplay">{locale === 'ar' ? 'لعب الأدوار والقصص' : 'Roleplay & stories'}</option>
+          <option value="tutor">{locale === 'ar' ? 'مدرّس شخصي' : 'Personal tutor'}</option>
+        </select>
+      </label>}
+      <div className={cn('flex flex-1 flex-col gap-4 pt-6', embedded ? 'max-h-[28rem] overflow-y-auto pb-5' : 'pb-32')} aria-live="polite">
+        {messages.length === 0 && !embedded && (
           <div className="rounded-3xl border border-border bg-card p-5 sm:p-8">
             <Sparkles className="mb-5 size-8 text-signal" />
             <h2 className="text-2xl font-semibold">{t.chat.greeting}</h2>
@@ -287,16 +303,16 @@ export function AssistantView({
         <div ref={endRef} />
       </div>
 
-      <div className="fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] z-20 bg-gradient-to-t from-background via-background to-transparent px-4 pb-3 pt-6">
+      <div className={embedded ? 'pt-3' : 'fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom))] z-20 bg-gradient-to-t from-background via-background to-transparent px-4 pb-3 pt-6'}>
         <form
           onSubmit={onSubmit}
           className="mx-auto flex w-full max-w-5xl items-end gap-2 rounded-2xl border border-border bg-card p-2 transition-colors focus-within:border-ring"
         >
-          <label htmlFor="assistant-input" className="sr-only">
+          <label htmlFor={embedded ? `stage-input-${lessonId}` : 'assistant-input'} className="sr-only">
             {t.assistant.inputLabel}
           </label>
           <textarea
-            id="assistant-input"
+            id={embedded ? `stage-input-${lessonId}` : 'assistant-input'}
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}

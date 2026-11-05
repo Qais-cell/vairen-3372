@@ -27,6 +27,7 @@ import { learningCopy } from '@/lib/learning-copy'
 import { cn } from '@/lib/utils'
 import { CareerImage } from './career-image'
 import { LibraryError } from './courses-view'
+import { StageStudio } from './stage-studio'
 
 const icons = { video: Play, reading: FileText, practice: Layers3, quiz: ClipboardCheck }
 export function CoursePlayer({
@@ -317,6 +318,7 @@ export function CoursePlayer({
                           {lesson.content.introduction[locale]}
                         </p>
                       </header>
+                      <StageStudio key={`${lesson.id}-${locale}`} course={data.course} lesson={lesson} index={lessonIndex} total={count} locale={locale} t={t} />
                       {lesson.kind === 'video' && (
                         <CourseVideo key={data.course.id} course={data.course} locale={locale} />
                       )}
