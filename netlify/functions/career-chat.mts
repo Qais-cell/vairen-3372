@@ -22,8 +22,11 @@ export default async function handler(request: Request) {
   try {
     const [lesson] = await db.select().from(learningLessons).where(eq(learningLessons.id, body.lessonId)).limit(1)
     if (!lesson) return Response.json({ error: 'Stage not found' }, { status: 404 })
+    if (body.sectionIndex !== undefined && (!Number.isInteger(body.sectionIndex) || body.sectionIndex < 0 || body.sectionIndex >= lesson.content.sections.length))
+      return Response.json({ error: 'Invalid concept' }, { status: 400 })
+    const focusedConcept = body.sectionIndex === undefined ? undefined : { index: body.sectionIndex, section: lesson.content.sections[body.sectionIndex] }
     const [course] = await db.select().from(learningCourses).where(eq(learningCourses.id, lesson.courseId)).limit(1)
-    return careerChat(request, JSON.stringify({ course: course?.title, source: course?.sourceTitle, lesson }))
+    return careerChat(request, JSON.stringify({ course: course?.title, source: course?.sourceTitle, lesson, focusedConcept }))
   } catch {
     return Response.json({ error: 'Stage tutor temporarily unavailable' }, { status: 503 })
   }
