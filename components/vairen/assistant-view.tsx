@@ -14,7 +14,7 @@ declare global {
   interface Window { SpeechRecognition?: SpeechRecognitionConstructor; webkitSpeechRecognition?: SpeechRecognitionConstructor }
 }
 
-export function AssistantView({ t }: { t: Dictionary }) {
+export function AssistantView({ t, initialPrompt, onPromptConsumed }: { t: Dictionary; initialPrompt?: string | null; onPromptConsumed?: () => void }) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [pending, setPending] = useState(false)
@@ -26,6 +26,14 @@ export function AssistantView({ t }: { t: Dictionary }) {
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [messages, pending])
+
+  useEffect(() => {
+    if (!initialPrompt) return
+    void send(initialPrompt)
+    onPromptConsumed?.()
+    // Deliberately depends only on the handoff value so a prompt is sent once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialPrompt])
 
   async function send(raw: string) {
     const text = raw.trim()

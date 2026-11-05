@@ -7,6 +7,8 @@ export type Profession = {
   demand: 'very' | 'high' | 'medium'
   salary: string
   growth: string
+  accent: string
+  avatar: string
   skills: { name: Localized; weight: number }[]
 }
 
@@ -31,6 +33,8 @@ export const professions: Profession[] = [
     demand: 'very',
     salary: '$162k',
     growth: '+36%',
+    accent: '#a78bfa',
+    avatar: 'ML',
     skills: [s('Python', 'بايثون', 95), s('Deep Learning', 'التعلم العميق', 88), s('MLOps', 'عمليات تعلم الآلة', 72), s('Statistics', 'الإحصاء', 80)],
   },
   {
@@ -40,6 +44,8 @@ export const professions: Profession[] = [
     demand: 'high',
     salary: '$138k',
     growth: '+22%',
+    accent: '#38bdf8',
+    avatar: 'BE',
     skills: [s('Distributed Systems', 'الأنظمة الموزعة', 85), s('SQL', 'SQL', 90), s('Go / Node.js', 'Go / Node.js', 82), s('API Design', 'تصميم الواجهات البرمجية', 88)],
   },
   {
@@ -49,6 +55,8 @@ export const professions: Profession[] = [
     demand: 'very',
     salary: '$171k',
     growth: '+28%',
+    accent: '#34d399',
+    avatar: 'CA',
     skills: [s('AWS / GCP', 'AWS / GCP', 92), s('Networking', 'الشبكات', 80), s('Terraform', 'Terraform', 78), s('Cost Optimization', 'تحسين التكاليف', 70)],
   },
   {
@@ -58,6 +66,8 @@ export const professions: Profession[] = [
     demand: 'very',
     salary: '$124k',
     growth: '+33%',
+    accent: '#fb7185',
+    avatar: 'SA',
     skills: [s('Threat Detection', 'كشف التهديدات', 90), s('SIEM', 'SIEM', 78), s('Incident Response', 'الاستجابة للحوادث', 85), s('Linux', 'لينكس', 75)],
   },
   {
@@ -67,6 +77,8 @@ export const professions: Profession[] = [
     demand: 'high',
     salary: '$141k',
     growth: '+21%',
+    accent: '#fbbf24',
+    avatar: 'DO',
     skills: [s('Kubernetes', 'Kubernetes', 88), s('CI/CD', 'التكامل والنشر المستمر', 92), s('Observability', 'المراقبة', 76), s('Scripting', 'البرمجة النصية', 80)],
   },
   {
@@ -76,6 +88,8 @@ export const professions: Profession[] = [
     demand: 'high',
     salary: '$135k',
     growth: '+24%',
+    accent: '#f97316',
+    avatar: 'DE',
     skills: [s('Spark', 'Spark', 82), s('Data Modeling', 'نمذجة البيانات', 88), s('Airflow', 'Airflow', 74), s('SQL', 'SQL', 94)],
   },
   {
@@ -85,6 +99,8 @@ export const professions: Profession[] = [
     demand: 'medium',
     salary: '$118k',
     growth: '+13%',
+    accent: '#f472b6',
+    avatar: 'PD',
     skills: [s('Interaction Design', 'تصميم التفاعل', 90), s('Prototyping', 'النماذج الأولية', 85), s('User Research', 'أبحاث المستخدمين', 78), s('Design Systems', 'أنظمة التصميم', 82)],
   },
   {
@@ -94,6 +110,8 @@ export const professions: Profession[] = [
     demand: 'high',
     salary: '$132k',
     growth: '+19%',
+    accent: '#818cf8',
+    avatar: 'ME',
     skills: [s('Swift / Kotlin', 'Swift / Kotlin', 90), s('React Native', 'React Native', 76), s('Performance', 'الأداء', 80), s('App Architecture', 'معمارية التطبيقات', 84)],
   },
   {
@@ -103,6 +121,8 @@ export const professions: Profession[] = [
     demand: 'very',
     salary: '$185k',
     growth: '+40%',
+    accent: '#c084fc',
+    avatar: 'AR',
     skills: [s('Linear Algebra', 'الجبر الخطي', 92), s('PyTorch', 'PyTorch', 90), s('Research Writing', 'الكتابة البحثية', 78), s('Experimentation', 'التجريب', 86)],
   },
   {
@@ -112,6 +132,8 @@ export const professions: Profession[] = [
     demand: 'medium',
     salary: '$146k',
     growth: '+12%',
+    accent: '#2dd4bf',
+    avatar: 'BC',
     skills: [s('Solidity', 'Solidity', 84), s('Cryptography', 'التشفير', 80), s('Rust', 'Rust', 72), s('Protocol Design', 'تصميم البروتوكولات', 76)],
   },
 ]

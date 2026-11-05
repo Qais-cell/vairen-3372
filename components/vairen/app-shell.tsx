@@ -10,6 +10,7 @@ import { CoursesView } from './courses-view'
 import { AssistantView } from './assistant-view'
 import { IntroScreen } from './intro-screen'
 import { AuthScreen } from './auth-screen'
+import { SettingsPanel } from './settings-panel'
 
 export function AppShell() {
   const [locale, setLocale] = useState<Locale>('en')
@@ -17,6 +18,8 @@ export function AppShell() {
   const [introVisible, setIntroVisible] = useState(true)
   const [sessionReady, setSessionReady] = useState(false)
   const [authenticated, setAuthenticated] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [careerPrompt, setCareerPrompt] = useState<string | null>(null)
   const t = dictionary[locale]
 
   useEffect(() => {
@@ -51,11 +54,12 @@ export function AppShell() {
 
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground">
-      <TopNav t={t} onToggleLocale={() => setLocale((l) => (l === 'en' ? 'ar' : 'en'))} />
+      <TopNav t={t} onToggleLocale={() => setLocale((l) => (l === 'en' ? 'ar' : 'en'))} onOpenSettings={() => setSettingsOpen(true)} />
+      {settingsOpen && <SettingsPanel t={t} onClose={() => setSettingsOpen(false)} onToggleLocale={() => setLocale((l) => (l === 'en' ? 'ar' : 'en'))} />}
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 pb-28 pt-6">
-        <Activity mode={tab === 'professions' ? 'visible' : 'hidden'}><ProfessionsView key={`p-${locale}`} t={t} locale={locale} /></Activity>
+        <Activity mode={tab === 'professions' ? 'visible' : 'hidden'}><ProfessionsView key={`p-${locale}`} t={t} locale={locale} onConsult={(prompt) => { setCareerPrompt(prompt); setTab('assistant') }} /></Activity>
         <Activity mode={tab === 'courses' ? 'visible' : 'hidden'}><CoursesView key={`c-${locale}`} t={t} locale={locale} /></Activity>
-        <Activity mode={tab === 'assistant' ? 'visible' : 'hidden'}><AssistantView t={t} /></Activity>
+        <Activity mode={tab === 'assistant' ? 'visible' : 'hidden'}><AssistantView t={t} initialPrompt={careerPrompt} onPromptConsumed={() => setCareerPrompt(null)} /></Activity>
       </main>
       <BottomNav t={t} active={tab} onChange={changeTab} />
     </div>

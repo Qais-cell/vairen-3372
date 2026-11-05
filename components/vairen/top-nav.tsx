@@ -1,7 +1,7 @@
-import { Languages } from 'lucide-react'
+import { Languages, SlidersHorizontal } from 'lucide-react'
 import type { Dictionary } from '@/lib/i18n'
 
-export function TopNav({ t, onToggleLocale }: { t: Dictionary; onToggleLocale: () => void }) {
+export function TopNav({ t, onToggleLocale, onOpenSettings }: { t: Dictionary; onToggleLocale: () => void; onOpenSettings: () => void }) {
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-xl">
       <div className="mx-auto flex h-14 w-full max-w-2xl items-center justify-between px-4">
@@ -20,7 +20,9 @@ export function TopNav({ t, onToggleLocale }: { t: Dictionary; onToggleLocale: (
           </span>
         </div>
 
-        <button
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={onOpenSettings} aria-label="Open settings" className="flex size-9 items-center justify-center rounded-full border border-transparent text-muted-foreground transition-colors hover:border-border hover:bg-secondary hover:text-foreground"><SlidersHorizontal className="size-4" /></button>
+          <button
           type="button"
           onClick={onToggleLocale}
           aria-label={t.toggleLabel}
@@ -28,7 +30,8 @@ export function TopNav({ t, onToggleLocale }: { t: Dictionary; onToggleLocale: (
         >
           <Languages className="size-4 text-muted-foreground" aria-hidden="true" />
           <span>{t.toggleText}</span>
-        </button>
+          </button>
+        </div>
       </div>
     </header>
   )

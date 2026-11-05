@@ -7,7 +7,7 @@ import type { Dictionary, Locale } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { SectionHeader } from './section-header'
 
-export function ProfessionsView({ t, locale }: { t: Dictionary; locale: Locale }) {
+export function ProfessionsView({ t, locale, onConsult }: { t: Dictionary; locale: Locale; onConsult: (prompt: string) => void }) {
   const [query, setQuery] = useState('')
   const deferredQuery = useDeferredValue(query)
 
@@ -59,7 +59,7 @@ export function ProfessionsView({ t, locale }: { t: Dictionary; locale: Locale }
         <ul className="flex flex-col gap-3">
           {results.map((p) => (
             <li key={p.id}>
-              <ProfessionCard profession={p} t={t} locale={locale} />
+              <ProfessionCard profession={p} t={t} locale={locale} onConsult={onConsult} />
             </li>
           ))}
         </ul>
@@ -68,23 +68,26 @@ export function ProfessionsView({ t, locale }: { t: Dictionary; locale: Locale }
   )
 }
 
-function ProfessionCard({ profession: p, t, locale }: { profession: Profession; t: Dictionary; locale: Locale }) {
+function ProfessionCard({ profession: p, t, locale, onConsult }: { profession: Profession; t: Dictionary; locale: Locale; onConsult: (prompt: string) => void }) {
   const [open, setOpen] = useState(false)
   const panelId = `skills-${p.id}`
 
   return (
-    <article className={cn('rounded-xl border bg-card transition-colors', open ? 'border-ring' : 'border-border hover:border-ring')}>
+    <article className={cn('overflow-hidden rounded-xl border bg-card transition-colors', open ? 'border-ring' : 'border-border hover:border-ring')} style={{ borderInlineStartColor: p.accent }}>
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => { setOpen((o) => !o); onConsult(`Act as a global career expert. Give me a tailored consultation for becoming a ${p.title.en}. Cover fit, skill gaps, a 90-day plan, portfolio proof and target roles.`) }}
         aria-expanded={open}
         aria-controls={panelId}
         className="flex w-full flex-col gap-4 p-4 text-start focus-visible:outline-2 focus-visible:-outline-offset-2"
       >
         <div className="flex items-start justify-between gap-4">
-          <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-3">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 text-xs font-semibold tracking-tight" style={{ color: p.accent, background: `radial-gradient(circle at 30% 20%, ${p.accent}44, transparent 65%), #101010` }} aria-hidden="true">{p.avatar}</span>
+            <div className="flex flex-col gap-1">
             <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">{p.field[locale]}</span>
-            <h3 className="text-base font-semibold leading-snug text-pretty">{p.title[locale]}</h3>
+              <h3 className="text-base font-semibold leading-snug text-pretty">{p.title[locale]}</h3>
+            </div>
           </div>
           <ChevronDown className={cn('mt-1 size-4 shrink-0 text-muted-foreground transition-transform duration-300', open && 'rotate-180')} aria-hidden="true" />
         </div>
