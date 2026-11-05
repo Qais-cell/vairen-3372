@@ -33,9 +33,11 @@ export function AssistantView({
   onPromptConsumed,
   embedded = false,
   lessonId,
+  sectionIndex,
 }: {
   embedded?: boolean
   lessonId?: string
+  sectionIndex?: number
   t: Dictionary
   locale: Locale
   initialPrompt?: string | null
@@ -100,6 +102,7 @@ export function AssistantView({
           locale,
           mode: lessonId ? 'tutor' : mode,
           lessonId,
+          sectionIndex,
           messages: history.slice(-16).map(({ role, text }) => ({ role, text })),
         }),
         signal: AbortSignal.timeout(55000),
