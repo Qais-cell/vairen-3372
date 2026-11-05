@@ -3,6 +3,8 @@ export type Locale = 'en' | 'ar'
 export const dictionary = {
   en: {
     status: 'Online',
+    intro: { welcome: 'Welcome to Vairen' },
+    auth: { title: 'Create your Vairen profile', subtitle: 'Unlock a private career intelligence workspace.', access: 'Vairen access', signIn: 'Sign in', signInSubtitle: 'Return to your career workspace.', name: 'Full name', email: 'Email address', password: 'Password', create: 'Create account', loading: 'Working…', existing: 'Already have an account? Sign in', newAccount: 'New to Vairen? Create an account', checkEmail: 'Check your email to confirm your account.', confirm: 'Confirm your email to continue.', invalid: 'Invalid email or password.' },
     toggleLabel: 'Switch to Arabic',
     toggleText: 'العربية',
     tabs: { professions: 'Professions', courses: 'Courses', assistant: 'Assistant' },
@@ -32,10 +34,13 @@ export const dictionary = {
     },
     assistant: {
       title: 'Vairen AI',
-      subtitle: 'Career and technical guidance powered by Google Gemini.',
+      subtitle: 'A global professions and employment expert for every language.',
       placeholder: 'Ask Vairen anything',
       inputLabel: 'Message Vairen',
       send: 'Send message',
+      voiceStart: 'Start voice input',
+      voiceStop: 'Stop voice input',
+      listening: 'Listening',
       thinking: 'Thinking',
       clear: 'New chat',
       you: 'You',
@@ -49,6 +54,8 @@ export const dictionary = {
   },
   ar: {
     status: 'متصل',
+    intro: { welcome: 'مرحبًا بك في فايرين' },
+    auth: { title: 'أنشئ ملفك في فايرين', subtitle: 'افتح مساحة خاصة لذكاء المسارات المهنية.', access: 'دخول فايرين', signIn: 'تسجيل الدخول', signInSubtitle: 'عد إلى مساحة مسارك المهني.', name: 'الاسم الكامل', email: 'البريد الإلكتروني', password: 'كلمة المرور', create: 'إنشاء الحساب', loading: 'جارٍ المعالجة…', existing: 'لديك حساب؟ سجل الدخول', newAccount: 'جديد في فايرين؟ أنشئ حسابًا', checkEmail: 'تحقق من بريدك لتأكيد الحساب.', confirm: 'أكد بريدك الإلكتروني للمتابعة.', invalid: 'البريد الإلكتروني أو كلمة المرور غير صحيحة.' },
     toggleLabel: 'التبديل إلى الإنجليزية',
     toggleText: 'English',
     tabs: { professions: 'المهن', courses: 'الدورات', assistant: 'المساعد' },
@@ -78,10 +85,13 @@ export const dictionary = {
     },
     assistant: {
       title: 'فايرين AI',
-      subtitle: 'إرشاد مهني وتقني مدعوم بـ Google Gemini.',
+      subtitle: 'خبير عالمي في المهن والتوظيف لكل اللغات.',
       placeholder: 'اسأل فايرين أي شيء',
       inputLabel: 'راسل فايرين',
       send: 'إرسال الرسالة',
+      voiceStart: 'بدء الإدخال الصوتي',
+      voiceStop: 'إيقاف الإدخال الصوتي',
+      listening: 'يستمع',
       thinking: 'يفكر',
       clear: 'محادثة جديدة',
       you: 'أنت',

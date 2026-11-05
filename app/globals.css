@@ -92,6 +92,11 @@
   animation: view-in 320ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
+@keyframes intro-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.02); }
+}
+
 @keyframes signal-pulse {
   0%,
   100% {

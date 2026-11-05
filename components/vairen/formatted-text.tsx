@@ -69,11 +69,14 @@ export function FormattedText({ text }: { text: string }) {
             </Tag>
           )
         }
-        return (
-          <p key={i} className="whitespace-pre-wrap text-pretty">
-            {inline(block.lines.join('\n'))}
-          </p>
-        )
+        if (block.type === 'p') {
+          return (
+            <p key={i} className="whitespace-pre-wrap text-pretty">
+              {inline(block.lines.join('\n'))}
+            </p>
+          )
+        }
+        return null
       })}
     </div>
   )
