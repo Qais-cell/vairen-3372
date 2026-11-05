@@ -55,15 +55,15 @@ export const dictionary = {
       reset: 'Reset filters',
     },
     chat: {
-      eyebrow: 'Your career thinking partner',
+      eyebrow: 'Your conversation & learning partner',
       disclaimer:
         'AI guidance can be imperfect. Verify current salaries, requirements and course details with original sources.',
       voice: 'Read responses aloud',
       voiceUnavailable: 'Voice input is unavailable. Check browser support and microphone permissions.',
       retry: 'Try again',
       starters: 'A good place to start',
-      greeting: 'What comes next in your career?',
-      greetingHint: 'Explore a direction, plan your next skill, or prepare for an interview.',
+      greeting: 'What would you like to explore?',
+      greetingHint: 'Start an open conversation, create a fictional scene, or learn something together.',
     },
     intro: { welcome: 'Welcome to Vairen' },
     auth: {
@@ -113,8 +113,8 @@ export const dictionary = {
     },
     assistant: {
       title: 'Vairen AI',
-      subtitle: 'A global professions and employment expert for every language.',
-      placeholder: 'Ask about a career, skill or interview…',
+      subtitle: 'Your space for open conversation, creative roleplay and guided learning.',
+      placeholder: 'Ask, imagine a story, or explore a skill…',
       inputLabel: 'Message Vairen',
       send: 'Send message',
       voiceStart: 'Start voice input',
@@ -184,15 +184,15 @@ export const dictionary = {
       reset: 'إعادة ضبط التصفية',
     },
     chat: {
-      eyebrow: 'شريكك في التفكير المهني',
+      eyebrow: 'شريكك في الحوار والتعلّم',
       disclaimer:
         'قد يخطئ الذكاء الاصطناعي. تحقق من الرواتب الحالية والمتطلبات وتفاصيل الدورات من مصادرها الأصلية.',
       voice: 'قراءة الإجابات بصوت مسموع',
       voiceUnavailable: 'الإدخال الصوتي غير متاح. تحقق من دعم المتصفح وأذونات الميكروفون.',
       retry: 'إعادة المحاولة',
       starters: 'نقطة بداية مناسبة',
-      greeting: 'ما خطوتك المهنية القادمة؟',
-      greetingHint: 'اكتشف تخصصاً أو خطط لتعلم مهارة أو استعد لمقابلة عمل.',
+      greeting: 'ما الذي تود استكشافه؟',
+      greetingHint: 'ابدأ حواراً مفتوحاً، ابتكر مشهداً خيالياً، أو تعلّم شيئاً جديداً.',
     },
     intro: { welcome: 'مرحبًا بك في فايرين' },
     auth: {
@@ -241,8 +241,8 @@ export const dictionary = {
     },
     assistant: {
       title: 'فايرين AI',
-      subtitle: 'خبير عالمي في المهن والتوظيف لكل اللغات.',
-      placeholder: 'اسأل عن مهنة أو مهارة أو مقابلة…',
+      subtitle: 'مساحتك للحوار المفتوح ولعب الأدوار الإبداعي والتعلّم الموجّه.',
+      placeholder: 'اسأل، تخيّل قصة، أو تعلّم مهارة…',
       inputLabel: 'راسل فايرين',
       send: 'إرسال الرسالة',
       voiceStart: 'بدء الإدخال الصوتي',
