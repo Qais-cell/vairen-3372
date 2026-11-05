@@ -23,10 +23,10 @@ export function BottomNav({
 
   return (
     <nav
-      aria-label="Primary"
+      aria-label={t.common.primary}
       className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/85 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl"
     >
-      <div className="relative mx-auto grid h-16 w-full max-w-2xl grid-cols-3 px-2">
+      <div className="relative mx-auto grid h-16 w-full max-w-5xl grid-cols-3 px-2">
         <span
           aria-hidden="true"
           className="absolute top-0 h-px w-1/3 bg-foreground transition-transform duration-300 ease-out ltr:left-0 rtl:right-0"

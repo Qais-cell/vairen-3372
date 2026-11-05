@@ -12,17 +12,6 @@ export type Profession = {
   skills: { name: Localized; weight: number }[]
 }
 
-export type Course = {
-  id: string
-  code: string
-  title: Localized
-  summary: Localized
-  category: 'systems' | 'ai' | 'cloud' | 'security'
-  level: 'beginner' | 'intermediate' | 'advanced'
-  modules: number
-  hours: number
-}
-
 const s = (en: string, ar: string, weight: number) => ({ name: { en, ar }, weight })
 
 export const professions: Profession[] = [
@@ -35,7 +24,12 @@ export const professions: Profession[] = [
     growth: '+36%',
     accent: '#a78bfa',
     avatar: 'ML',
-    skills: [s('Python', 'بايثون', 95), s('Deep Learning', 'التعلم العميق', 88), s('MLOps', 'عمليات تعلم الآلة', 72), s('Statistics', 'الإحصاء', 80)],
+    skills: [
+      s('Python', 'بايثون', 95),
+      s('Deep Learning', 'التعلم العميق', 88),
+      s('MLOps', 'عمليات تعلم الآلة', 72),
+      s('Statistics', 'الإحصاء', 80),
+    ],
   },
   {
     id: 'backend-engineer',
@@ -46,7 +40,12 @@ export const professions: Profession[] = [
     growth: '+22%',
     accent: '#38bdf8',
     avatar: 'BE',
-    skills: [s('Distributed Systems', 'الأنظمة الموزعة', 85), s('SQL', 'SQL', 90), s('Go / Node.js', 'Go / Node.js', 82), s('API Design', 'تصميم الواجهات البرمجية', 88)],
+    skills: [
+      s('Distributed Systems', 'الأنظمة الموزعة', 85),
+      s('SQL', 'SQL', 90),
+      s('Go / Node.js', 'Go / Node.js', 82),
+      s('API Design', 'تصميم الواجهات البرمجية', 88),
+    ],
   },
   {
     id: 'cloud-architect',
@@ -57,7 +56,12 @@ export const professions: Profession[] = [
     growth: '+28%',
     accent: '#34d399',
     avatar: 'CA',
-    skills: [s('AWS / GCP', 'AWS / GCP', 92), s('Networking', 'الشبكات', 80), s('Terraform', 'Terraform', 78), s('Cost Optimization', 'تحسين التكاليف', 70)],
+    skills: [
+      s('AWS / GCP', 'AWS / GCP', 92),
+      s('Networking', 'الشبكات', 80),
+      s('Terraform', 'Terraform', 78),
+      s('Cost Optimization', 'تحسين التكاليف', 70),
+    ],
   },
   {
     id: 'security-analyst',
@@ -68,7 +72,12 @@ export const professions: Profession[] = [
     growth: '+33%',
     accent: '#fb7185',
     avatar: 'SA',
-    skills: [s('Threat Detection', 'كشف التهديدات', 90), s('SIEM', 'SIEM', 78), s('Incident Response', 'الاستجابة للحوادث', 85), s('Linux', 'لينكس', 75)],
+    skills: [
+      s('Threat Detection', 'كشف التهديدات', 90),
+      s('SIEM', 'SIEM', 78),
+      s('Incident Response', 'الاستجابة للحوادث', 85),
+      s('Linux', 'لينكس', 75),
+    ],
   },
   {
     id: 'devops-engineer',
@@ -79,7 +88,12 @@ export const professions: Profession[] = [
     growth: '+21%',
     accent: '#fbbf24',
     avatar: 'DO',
-    skills: [s('Kubernetes', 'Kubernetes', 88), s('CI/CD', 'التكامل والنشر المستمر', 92), s('Observability', 'المراقبة', 76), s('Scripting', 'البرمجة النصية', 80)],
+    skills: [
+      s('Kubernetes', 'Kubernetes', 88),
+      s('CI/CD', 'التكامل والنشر المستمر', 92),
+      s('Observability', 'المراقبة', 76),
+      s('Scripting', 'البرمجة النصية', 80),
+    ],
   },
   {
     id: 'data-engineer',
@@ -90,7 +104,12 @@ export const professions: Profession[] = [
     growth: '+24%',
     accent: '#f97316',
     avatar: 'DE',
-    skills: [s('Spark', 'Spark', 82), s('Data Modeling', 'نمذجة البيانات', 88), s('Airflow', 'Airflow', 74), s('SQL', 'SQL', 94)],
+    skills: [
+      s('Spark', 'Spark', 82),
+      s('Data Modeling', 'نمذجة البيانات', 88),
+      s('Airflow', 'Airflow', 74),
+      s('SQL', 'SQL', 94),
+    ],
   },
   {
     id: 'product-designer',
@@ -101,7 +120,12 @@ export const professions: Profession[] = [
     growth: '+13%',
     accent: '#f472b6',
     avatar: 'PD',
-    skills: [s('Interaction Design', 'تصميم التفاعل', 90), s('Prototyping', 'النماذج الأولية', 85), s('User Research', 'أبحاث المستخدمين', 78), s('Design Systems', 'أنظمة التصميم', 82)],
+    skills: [
+      s('Interaction Design', 'تصميم التفاعل', 90),
+      s('Prototyping', 'النماذج الأولية', 85),
+      s('User Research', 'أبحاث المستخدمين', 78),
+      s('Design Systems', 'أنظمة التصميم', 82),
+    ],
   },
   {
     id: 'mobile-engineer',
@@ -112,7 +136,12 @@ export const professions: Profession[] = [
     growth: '+19%',
     accent: '#818cf8',
     avatar: 'ME',
-    skills: [s('Swift / Kotlin', 'Swift / Kotlin', 90), s('React Native', 'React Native', 76), s('Performance', 'الأداء', 80), s('App Architecture', 'معمارية التطبيقات', 84)],
+    skills: [
+      s('Swift / Kotlin', 'Swift / Kotlin', 90),
+      s('React Native', 'React Native', 76),
+      s('Performance', 'الأداء', 80),
+      s('App Architecture', 'معمارية التطبيقات', 84),
+    ],
   },
   {
     id: 'ai-researcher',
@@ -123,7 +152,12 @@ export const professions: Profession[] = [
     growth: '+40%',
     accent: '#c084fc',
     avatar: 'AR',
-    skills: [s('Linear Algebra', 'الجبر الخطي', 92), s('PyTorch', 'PyTorch', 90), s('Research Writing', 'الكتابة البحثية', 78), s('Experimentation', 'التجريب', 86)],
+    skills: [
+      s('Linear Algebra', 'الجبر الخطي', 92),
+      s('PyTorch', 'PyTorch', 90),
+      s('Research Writing', 'الكتابة البحثية', 78),
+      s('Experimentation', 'التجريب', 86),
+    ],
   },
   {
     id: 'blockchain-engineer',
@@ -134,96 +168,21 @@ export const professions: Profession[] = [
     growth: '+12%',
     accent: '#2dd4bf',
     avatar: 'BC',
-    skills: [s('Solidity', 'Solidity', 84), s('Cryptography', 'التشفير', 80), s('Rust', 'Rust', 72), s('Protocol Design', 'تصميم البروتوكولات', 76)],
+    skills: [
+      s('Solidity', 'Solidity', 84),
+      s('Cryptography', 'التشفير', 80),
+      s('Rust', 'Rust', 72),
+      s('Protocol Design', 'تصميم البروتوكولات', 76),
+    ],
   },
 ]
 
-export const courses: Course[] = [
-  {
-    id: 'os-internals',
-    code: 'SYS-101',
-    title: { en: 'Operating System Internals', ar: 'أساسيات أنظمة التشغيل' },
-    summary: { en: 'Processes, memory, schedulers and file systems from first principles.', ar: 'العمليات والذاكرة والجدولة وأنظمة الملفات من المبادئ الأولى.' },
-    category: 'systems',
-    level: 'intermediate',
-    modules: 12,
-    hours: 28,
-  },
-  {
-    id: 'distributed-systems',
-    code: 'SYS-240',
-    title: { en: 'Distributed Systems Design', ar: 'تصميم الأنظمة الموزعة' },
-    summary: { en: 'Consensus, replication, partitioning and failure-tolerant architecture.', ar: 'الإجماع والنسخ والتقسيم والمعمارية المقاومة للأعطال.' },
-    category: 'systems',
-    level: 'advanced',
-    modules: 14,
-    hours: 36,
-  },
-  {
-    id: 'llm-engineering',
-    code: 'AI-210',
-    title: { en: 'LLM Application Engineering', ar: 'هندسة تطبيقات النماذج اللغوية' },
-    summary: { en: 'Retrieval, tool use, evaluation and deploying language models at scale.', ar: 'الاسترجاع واستخدام الأدوات والتقييم ونشر النماذج اللغوية على نطاق واسع.' },
-    category: 'ai',
-    level: 'intermediate',
-    modules: 10,
-    hours: 22,
-  },
-  {
-    id: 'neural-networks',
-    code: 'AI-101',
-    title: { en: 'Neural Networks Foundations', ar: 'أسس الشبكات العصبية' },
-    summary: { en: 'Backpropagation, optimization and building networks from scratch.', ar: 'الانتشار العكسي والتحسين وبناء الشبكات من الصفر.' },
-    category: 'ai',
-    level: 'beginner',
-    modules: 8,
-    hours: 16,
-  },
-  {
-    id: 'cloud-native',
-    code: 'CLD-150',
-    title: { en: 'Cloud Native Infrastructure', ar: 'البنية التحتية السحابية الأصلية' },
-    summary: { en: 'Containers, Kubernetes, service meshes and infrastructure as code.', ar: 'الحاويات وKubernetes وشبكات الخدمات والبنية كرمز.' },
-    category: 'cloud',
-    level: 'intermediate',
-    modules: 11,
-    hours: 26,
-  },
-  {
-    id: 'serverless',
-    code: 'CLD-080',
-    title: { en: 'Serverless Architecture', ar: 'المعمارية بدون خوادم' },
-    summary: { en: 'Event-driven compute, edge runtimes and cost-aware design.', ar: 'الحوسبة القائمة على الأحداث وبيئات الحافة والتصميم الواعي بالتكلفة.' },
-    category: 'cloud',
-    level: 'beginner',
-    modules: 7,
-    hours: 12,
-  },
-  {
-    id: 'offensive-security',
-    code: 'SEC-300',
-    title: { en: 'Offensive Security Practice', ar: 'ممارسة الأمن الهجومي' },
-    summary: { en: 'Reconnaissance, exploitation and responsible disclosure in lab environments.', ar: 'الاستطلاع والاستغلال والإفصاح المسؤول في بيئات المختبر.' },
-    category: 'security',
-    level: 'advanced',
-    modules: 13,
-    hours: 34,
-  },
-  {
-    id: 'secure-engineering',
-    code: 'SEC-120',
-    title: { en: 'Secure Software Engineering', ar: 'هندسة البرمجيات الآمنة' },
-    summary: { en: 'Threat modeling, authentication and hardening production systems.', ar: 'نمذجة التهديدات والمصادقة وتحصين أنظمة الإنتاج.' },
-    category: 'security',
-    level: 'intermediate',
-    modules: 9,
-    hours: 18,
-  },
-]
-
-export const courseCategories: Record<Course['category'], Localized> = {
-  systems: { en: 'Systems', ar: 'الأنظمة' },
-  ai: { en: 'AI', ar: 'الذكاء الاصطناعي' },
-  cloud: { en: 'Cloud', ar: 'السحابة' },
-  security: { en: 'Security', ar: 'الأمن' },
+export function professionImage(id: string) {
+  return `/images/careers/${id}.jpg`
+}
+export function professionPrompt(p: Profession, locale: 'en' | 'ar') {
+  const skills = p.skills.map((s) => s.name[locale]).join(locale === 'ar' ? '، ' : ', ')
+  return locale === 'ar'
+    ? `صمّم ملصقاً تعليمياً احترافياً بنسبة 16:9 عن مهنة «${p.title.ar}» في مجال ${p.field.ar}. ارسم أربع وحدات بصرية مترابطة تشرح ${skills} بأمثلة من العمل اليومي. وضّح مساراً من الأساسيات إلى مشروع تطبيقي ثم ملف أعمال. استخدم رسوماً متجهة واضحة وألواناً هادئة وتبايناً مقروءاً وعناوين عربية من اليمين إلى اليسار. تجنب الشعارات والأرقام والإحصاءات المختلقة.`
+    : `Create a professional 16:9 educational poster for a ${p.title.en} in ${p.field.en}. Illustrate four connected skill modules: ${skills}, using concrete examples from daily work. Show a progression from foundations to an applied project and a professional portfolio. Use clear vector illustrations, restrained colors, accessible contrast and readable English labels. No logos or invented statistics.`
 }

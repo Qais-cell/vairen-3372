@@ -1,139 +1,132 @@
 'use client'
 
 import { useDeferredValue, useMemo, useState } from 'react'
-import { ChevronDown, Search, X } from 'lucide-react'
-import { professions, type Profession } from '@/lib/data'
+import { ArrowUpRight, Search, X } from 'lucide-react'
+import { professions, professionImage } from '@/lib/data'
 import type { Dictionary, Locale } from '@/lib/i18n'
-import { cn } from '@/lib/utils'
-import { SectionHeader } from './section-header'
+import { CareerImage } from './career-image'
 
-export function ProfessionsView({ t, locale, onConsult, onOpen }: { t: Dictionary; locale: Locale; onConsult: (prompt: string) => void; onOpen: (id: string) => void }) {
+export function ProfessionsView({
+  t,
+  locale,
+  onOpen,
+}: {
+  t: Dictionary
+  locale: Locale
+  onOpen: (id: string) => void
+}) {
   const [query, setQuery] = useState('')
   const deferredQuery = useDeferredValue(query)
-
   const results = useMemo(() => {
-    const q = deferredQuery.trim().toLowerCase()
-    if (!q) return professions
-    return professions.filter((p) =>
-      [p.title.en, p.title.ar, p.field.en, p.field.ar, ...p.skills.flatMap((s) => [s.name.en, s.name.ar])]
-        .some((v) => v.toLowerCase().includes(q)),
+    const q = deferredQuery.trim().toLocaleLowerCase(locale)
+    return professions.filter(
+      (p) =>
+        !q ||
+        [
+          p.title.en,
+          p.title.ar,
+          p.field.en,
+          p.field.ar,
+          ...p.skills.flatMap((s) => [s.name.en, s.name.ar]),
+        ].some((v) => v.toLocaleLowerCase(locale).includes(q)),
     )
-  }, [deferredQuery])
-
+  }, [deferredQuery, locale])
   return (
-    <section className="animate-view-in flex flex-col gap-6" aria-labelledby="professions-title">
-      <SectionHeader id="professions-title" eyebrow={t.professions.eyebrow} title={t.professions.title} subtitle={t.professions.subtitle} />
-
-      <div className="flex flex-col gap-3">
-        <div className="relative">
-          <Search className="pointer-events-none absolute top-1/2 size-4 -translate-y-1/2 text-muted-foreground ltr:left-4 rtl:right-4" aria-hidden="true" />
+    <section className="animate-view-in flex flex-col gap-8" aria-labelledby="professions-title">
+      <header className="career-hero grid items-end gap-8 py-5 sm:grid-cols-[1.5fr_1fr] sm:py-9">
+        <div>
+          <p className="mb-5 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-signal">
+            <span className="h-px w-7 bg-signal" />
+            {t.professions.eyebrow}
+          </p>
+          <h1
+            id="professions-title"
+            className="max-w-lg text-4xl font-semibold leading-[1.18] tracking-tight sm:text-6xl"
+          >
+            {t.professions.title}
+            <span className="text-signal">.</span>
+          </h1>
+          <p className="mt-5 max-w-md text-base leading-7 text-muted-foreground">{t.professions.subtitle}</p>
+        </div>
+        <div className="hero-note rounded-2xl border-s-2 border-signal bg-secondary/50 p-5">
+          <span className="mb-2 block font-mono text-3xl text-signal">01—10</span>
+          <p className="text-sm leading-7 text-muted-foreground">{t.career.marketNote}</p>
+        </div>
+      </header>
+      <div className="flex items-center gap-4">
+        <div className="relative flex-1">
+          <Search className="pointer-events-none absolute start-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t.professions.searchPlaceholder}
             aria-label={t.professions.searchLabel}
-            className="h-12 w-full rounded-xl border border-border bg-card px-11 text-[15px] text-foreground placeholder:text-muted-foreground transition-colors focus:border-ring focus:outline-none [&::-webkit-search-cancel-button]:hidden"
+            className="h-13 w-full rounded-xl border border-border bg-card ps-11 pe-12 text-sm outline-none focus:border-signal [&::-webkit-search-cancel-button]:hidden"
           />
           {query && (
             <button
               type="button"
               onClick={() => setQuery('')}
-              aria-label="Clear search"
-              className="absolute top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground hover:text-foreground ltr:right-2 rtl:left-2"
+              aria-label={t.common.clearSearch}
+              className="absolute end-2 top-1/2 -translate-y-1/2 rounded-full p-2"
             >
-              <X className="size-4" aria-hidden="true" />
+              <X className="size-4" />
             </button>
           )}
         </div>
-        <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground" aria-live="polite">
+        <span className="hidden shrink-0 text-xs text-muted-foreground sm:block" aria-live="polite">
           {t.professions.results(results.length)}
-        </p>
+        </span>
       </div>
-
-      {results.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border px-4 py-10 text-center text-sm text-muted-foreground">
+      {!results.length ? (
+        <p
+          className="rounded-2xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground"
+          role="status"
+        >
           {t.professions.empty}
         </p>
       ) : (
-        <ul className="flex flex-col gap-3">
-          {results.map((p) => (
-            <li key={p.id}>
-              <ProfessionCard profession={p} t={t} locale={locale} onConsult={onConsult} onOpen={onOpen} />
+        <ul className="career-grid grid gap-5 sm:grid-cols-2">
+          {results.map((p, i) => (
+            <li key={p.id} className="animate-view-in" style={{ animationDelay: `${Math.min(i, 5) * 65}ms` }}>
+              <button
+                type="button"
+                onClick={() => onOpen(p.id)}
+                className="career-card group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-border bg-card text-start"
+              >
+                <div className="relative aspect-[1.9] w-full overflow-hidden">
+                  <CareerImage
+                    src={professionImage(p.id)}
+                    alt={p.title[locale]}
+                    eager={i < 2}
+                    className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <span className="absolute start-4 top-4 rounded-full bg-background/95 px-3 py-1.5 font-mono text-[10px]">
+                    {String(professions.indexOf(p) + 1).padStart(2, '0')} / {p.avatar}
+                  </span>
+                  <span className="absolute bottom-3 end-3 flex size-9 items-center justify-center rounded-full bg-card text-foreground transition-transform group-hover:-translate-y-1">
+                    <ArrowUpRight className="size-4 rtl:-scale-x-100" />
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col gap-3 p-5">
+                  <span className="text-[11px] font-medium text-signal">{p.field[locale]}</span>
+                  <h2 className="text-xl font-semibold tracking-tight">{p.title[locale]}</h2>
+                  <p className="text-xs leading-6 text-muted-foreground">
+                    {p.skills
+                      .slice(0, 3)
+                      .map((s) => s.name[locale])
+                      .join(' · ')}
+                  </p>
+                  <span className="mt-auto border-t border-border pt-3 text-xs font-medium">
+                    {t.career.explore}
+                  </span>
+                </div>
+              </button>
             </li>
           ))}
         </ul>
       )}
     </section>
-  )
-}
-
-function ProfessionCard({ profession: p, t, locale, onConsult, onOpen }: { profession: Profession; t: Dictionary; locale: Locale; onConsult: (prompt: string) => void; onOpen: (id: string) => void }) {
-  const [open, setOpen] = useState(false)
-  const panelId = `skills-${p.id}`
-
-  return (
-    <article className={cn('overflow-hidden rounded-xl border bg-card transition-colors', open ? 'border-ring' : 'border-border hover:border-ring')} style={{ borderInlineStartColor: p.accent }}>
-      <button
-        type="button"
-        onClick={() => { setOpen((o) => !o); onOpen(p.id) }}
-        aria-expanded={open}
-        aria-controls={panelId}
-        className="flex w-full flex-col gap-4 p-4 text-start focus-visible:outline-2 focus-visible:-outline-offset-2"
-      >
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 text-xs font-semibold tracking-tight" style={{ color: p.accent, background: `radial-gradient(circle at 30% 20%, ${p.accent}44, transparent 65%), #101010` }} aria-hidden="true">{p.avatar}</span>
-            <div className="flex flex-col gap-1">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">{p.field[locale]}</span>
-              <h3 className="text-base font-semibold leading-snug text-pretty">{p.title[locale]}</h3>
-            </div>
-          </div>
-          <ChevronDown className={cn('mt-1 size-4 shrink-0 text-muted-foreground transition-transform duration-300', open && 'rotate-180')} aria-hidden="true" />
-        </div>
-
-        <dl className="grid grid-cols-3 gap-2 border-t border-border pt-3">
-          <Stat label={t.professions.demand} value={t.professions.levels[p.demand]} highlight={p.demand === 'very'} />
-          <Stat label={t.professions.salary} value={p.salary} />
-          <Stat label={t.professions.growth} value={p.growth} />
-        </dl>
-      </button>
-
-      <div
-        id={panelId}
-        className={cn('grid transition-[grid-template-rows] duration-300 ease-out', open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]')}
-      >
-        <div className="overflow-hidden">
-          <div className="flex flex-col gap-3 border-t border-border p-4">
-            <h4 className="font-mono text-[11px] uppercase tracking-wider text-muted-foreground">{t.professions.analyze}</h4>
-            <ul className="flex flex-col gap-3">
-              {p.skills.map((s) => (
-                <li key={s.name.en} className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between text-sm">
-                    <span>{s.name[locale]}</span>
-                    <span className="font-mono text-xs text-muted-foreground">{s.weight}</span>
-                  </div>
-                  <div className="h-1 overflow-hidden rounded-full bg-secondary" role="presentation">
-                    <div
-                      className="h-full rounded-full bg-foreground transition-[width] duration-700 ease-out"
-                      style={{ width: open ? `${s.weight}%` : '0%' }}
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </article>
-  )
-}
-
-function Stat({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
-  return (
-    <div className="flex flex-col gap-0.5">
-      <dt className="text-[11px] text-muted-foreground">{label}</dt>
-      <dd className={cn('font-mono text-sm', highlight ? 'text-signal' : 'text-foreground')}>{value}</dd>
-    </div>
   )
 }
