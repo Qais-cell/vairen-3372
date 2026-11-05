@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-const GEMINI_API_KEY = 'AQ.Ab8RN6Iq5EaT8cX5Sq5cxLfDHkKPcaTxITN0uJcsD_yZEleLAg'
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 
 // gemini-1.5-flash is retired by Google (404); later entries keep the chat working.
 const MODEL_CHAIN = [
@@ -28,6 +28,8 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
   }
+
+  if (!GEMINI_API_KEY) return NextResponse.json({ error: 'Assistant is not configured.' }, { status: 503 })
 
   const contents = messages
     .filter(

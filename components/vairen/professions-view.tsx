@@ -7,7 +7,7 @@ import type { Dictionary, Locale } from '@/lib/i18n'
 import { cn } from '@/lib/utils'
 import { SectionHeader } from './section-header'
 
-export function ProfessionsView({ t, locale, onConsult }: { t: Dictionary; locale: Locale; onConsult: (prompt: string) => void }) {
+export function ProfessionsView({ t, locale, onConsult, onOpen }: { t: Dictionary; locale: Locale; onConsult: (prompt: string) => void; onOpen: (id: string) => void }) {
   const [query, setQuery] = useState('')
   const deferredQuery = useDeferredValue(query)
 
@@ -59,7 +59,7 @@ export function ProfessionsView({ t, locale, onConsult }: { t: Dictionary; local
         <ul className="flex flex-col gap-3">
           {results.map((p) => (
             <li key={p.id}>
-              <ProfessionCard profession={p} t={t} locale={locale} onConsult={onConsult} />
+              <ProfessionCard profession={p} t={t} locale={locale} onConsult={onConsult} onOpen={onOpen} />
             </li>
           ))}
         </ul>
@@ -68,7 +68,7 @@ export function ProfessionsView({ t, locale, onConsult }: { t: Dictionary; local
   )
 }
 
-function ProfessionCard({ profession: p, t, locale, onConsult }: { profession: Profession; t: Dictionary; locale: Locale; onConsult: (prompt: string) => void }) {
+function ProfessionCard({ profession: p, t, locale, onConsult, onOpen }: { profession: Profession; t: Dictionary; locale: Locale; onConsult: (prompt: string) => void; onOpen: (id: string) => void }) {
   const [open, setOpen] = useState(false)
   const panelId = `skills-${p.id}`
 
@@ -76,7 +76,7 @@ function ProfessionCard({ profession: p, t, locale, onConsult }: { profession: P
     <article className={cn('overflow-hidden rounded-xl border bg-card transition-colors', open ? 'border-ring' : 'border-border hover:border-ring')} style={{ borderInlineStartColor: p.accent }}>
       <button
         type="button"
-        onClick={() => { setOpen((o) => !o); onConsult(`Act as a global career expert. Give me a tailored consultation for becoming a ${p.title.en}. Cover fit, skill gaps, a 90-day plan, portfolio proof and target roles.`) }}
+        onClick={() => { setOpen((o) => !o); onOpen(p.id) }}
         aria-expanded={open}
         aria-controls={panelId}
         className="flex w-full flex-col gap-4 p-4 text-start focus-visible:outline-2 focus-visible:-outline-offset-2"

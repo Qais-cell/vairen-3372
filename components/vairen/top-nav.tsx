@@ -3,7 +3,7 @@ import type { Dictionary } from '@/lib/i18n'
 
 export function TopNav({ t, onToggleLocale, onOpenSettings }: { t: Dictionary; onToggleLocale: () => void; onOpenSettings: () => void }) {
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 bg-transparent px-2 pt-2">
       <div className="mx-auto flex h-14 w-full max-w-2xl items-center justify-between px-4">
         <div className="flex items-center gap-3">
           <span className="font-sans text-lg font-semibold tracking-tight" translate="no">

@@ -9,7 +9,7 @@ import { SectionHeader } from './section-header'
 
 type Filter = Course['category'] | 'all'
 
-export function CoursesView({ t, locale }: { t: Dictionary; locale: Locale }) {
+export function CoursesView({ t, locale, onOpen }: { t: Dictionary; locale: Locale; onOpen: (id: string) => void }) {
   const [filter, setFilter] = useState<Filter>('all')
   const filters: Filter[] = ['all', ...(Object.keys(courseCategories) as Course['category'][])]
   const visible = filter === 'all' ? courses : courses.filter((c) => c.category === filter)
@@ -40,7 +40,7 @@ export function CoursesView({ t, locale }: { t: Dictionary; locale: Locale }) {
       <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {visible.map((c, i) => (
           <li key={c.id} className="animate-view-in" style={{ animationDelay: `${i * 40}ms` }}>
-            <CourseCard course={c} t={t} locale={locale} />
+            <CourseCard course={c} t={t} locale={locale} onOpen={onOpen} />
           </li>
         ))}
       </ul>
@@ -48,11 +48,11 @@ export function CoursesView({ t, locale }: { t: Dictionary; locale: Locale }) {
   )
 }
 
-function CourseCard({ course: c, t, locale }: { course: Course; t: Dictionary; locale: Locale }) {
+function CourseCard({ course: c, t, locale, onOpen }: { course: Course; t: Dictionary; locale: Locale; onOpen: (id: string) => void }) {
   const levelIndex = ['beginner', 'intermediate', 'advanced'].indexOf(c.level)
 
   return (
-    <article className="group flex h-full flex-col gap-4 rounded-xl border border-border bg-card p-4 transition-colors hover:border-ring">
+    <button type="button" onClick={() => onOpen(c.id)} className="group flex h-full w-full flex-col gap-4 rounded-xl border border-border bg-card p-4 text-start transition-all hover:-translate-y-0.5 hover:border-ring">
       <div className="flex items-center justify-between">
         <span className="font-mono text-[11px] tracking-wider text-muted-foreground" translate="no">{c.code}</span>
         <ArrowUpRight
@@ -79,6 +79,6 @@ function CourseCard({ course: c, t, locale }: { course: Course; t: Dictionary; l
           {c.modules} {t.courses.modules} / {c.hours} {t.courses.hours}
         </span>
       </div>
-    </article>
+    </button>
   )
 }
